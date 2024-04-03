@@ -26,7 +26,7 @@ class ProductManager {
             }
             return [];
         } catch (error) {
-            console.error('Ocurrió un error al obtener el archivo de los products:', error);
+            console.error('Ocurrió un error al obtener el archivo de los productos:', error);
             return [];
         }
     }
@@ -40,17 +40,18 @@ class ProductManager {
         }
     }
 
-    addProduct(title, description, price, thumbnail, code, stock) {
-        if (!title || !description || !price || !thumbnail || !code || !stock) {
-            return 'Todos los parametros son requeridos [title, description, price, thumbnail, code, stock]';
+    addProduct(title, description, price, thumbnail, code, stock, category, status = true) {
+        
+        if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+            return 'Todos los parametros son requeridos [title, description, price, thumbnail, code, stock, category]';
         }
 
         const codeRepetido = this.#products.some(product => product.code === code);
         if (codeRepetido) {
-            return `El código ${code} ya se encuentra registrado en otro product`;
+            return `El código ${code} ya se encuentra registrado en otro producto`;
         }
 
-        ProductManager.idPproduct = ProductManager.idProduct + 1;
+        ProductManager.idProduct = ProductManager.idProduct + 1;
         const id = this.#AssingId();
 
         const newProduct = {
@@ -61,11 +62,13 @@ class ProductManager {
             thumbnail,
             code,
             stock,
+            category,
+            status
         };
         this.#products.push(newProduct);
         this.#SaveFile();
 
-        return 'product agregado correctamente';
+        return "producto agregado correctamente";
     }
 
     getProducts(limit = 0) {
@@ -76,12 +79,16 @@ class ProductManager {
     }
 
     getProductById(id) {
+        let status = false;
+        let resp = `El producto con id ${id} no existe.`;
+
         const product = this.#products.find(product => product.id == id);
         if (product) {
-            return product;
-        } else {
-            return `Not found del product con id ${id}`;
-        }
+            status = true;
+            resp = product
+        } 
+
+        return {status, resp}
     }
 
     updateProduct(id, updateObjets) {
@@ -91,9 +98,16 @@ class ProductManager {
 
         if (index !== -1) {
             const { id, ...rest } = updateObjets;
+            const propiedadesPermitidas = ["title", "description", "price", "thumbnails", "code", "stock", "category", "status"];
+            const propiedadesActualizado = Object.keys(rest)
+            .filter(propiedad => propiedadesPermitidas.includes(propiedad))
+            .reduce((obj,key) => {
+                obj[key] = rest[key];
+                return obj;
+            }, {});
             this.#products[index] = { ...this.#products[index], ...rest };
             this.#SaveFile();
-            mensaje = 'product actualizado';
+            mensaje = 'producto actualizado';
         }
 
         return mensaje;
