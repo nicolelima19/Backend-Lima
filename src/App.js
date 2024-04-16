@@ -29,5 +29,9 @@ app.use("/api/cart", cart);
 const expressServer = app.listen(PORT, () => {console.log(`Corriendo aplicación en puerto ${PORT}`);});
 const socketServer = new Server(home.handlebars);
 
+socketServer.on ('connection', socket => {
+    console.log("Cleinte conectado");
+});
+
 
 
