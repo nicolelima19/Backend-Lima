@@ -40,9 +40,9 @@ class ProductManager {
         }
     }
 
-    addProduct(title, description, price, thumbnail, code, stock, category, status = true) {
+    addProduct(title, description, price, code, stock, category, status = true) {
         
-        if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+        if (!title || !description || !price || !code || !stock || !category) {
             return 'Todos los parametros son requeridos [title, description, price, thumbnail, code, stock, category]';
         }
 
