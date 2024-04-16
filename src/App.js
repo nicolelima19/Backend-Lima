@@ -33,5 +33,3 @@ socketServer.on ('connection', socket => {
     console.log("Cleinte conectado");
 });
 
-
-
