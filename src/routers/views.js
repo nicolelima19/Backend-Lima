@@ -1,18 +1,13 @@
 import { Router } from "express";
-import { productModel } from '../dao/models/products.js';
+import { getProductsService } from "../services/productManager.js";
 
 const router = Router();
 
 
 router.get('/', async (req, res) => {
-    try {
-        const productos = await productModel.find();
-        return res.render('home', { productos });
-    } catch (error) {
-        console.error('Error al obtener productos:', error);
-        return res.status(500).json({ error: 'Error al obtener productos' });
-    }
-});
+        const {payload} = await getProductsService({});
+        return res.render('home', {productos:payload, styles: 'styles.css', title: 'Home'});
+    });
 
 
 router.get('/realtimeproducts', (req, res) => {
