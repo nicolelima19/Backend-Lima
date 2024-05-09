@@ -1,19 +1,20 @@
 import express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
-
-import __dirname from "./utils.js";
+import "dotenv/config";
 
 import products from "./routers/product.js";
 import cart from "./routers/cart.js";
 import views from "./routers/views.js";
+import __dirname from "./utils.js";
 import { dbConnection } from "./database/config.js";
 import { productModel } from "./dao/models/products.js";
+import { messageModel } from "./dao/models/messages.js";
 
 await dbConnection();
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,10 +40,25 @@ io.on('connection', async (socket) => {
     socket.on("agregarProducto", producto => {
         console.log({ producto });
         const result = productModel.create({ ...producto });
-        if (result){
+        if (result) {
             productos.push(newProduct)
             socket.emit('productos', result.producto);
         }
     });
+
+
+    //Chat messages
+    const messages = await messageModel.find();
+    socket.emit('message', messages);
+
+    socket.on('message', async(data) => {
+        const newMessage = await messageModel.create({...data});
+        if(newMessage){
+            const messages = await messageModel.find();
+            io.emit('messageLogs', messages)
+        }
+    });
+
+    socket.broadcast.emit('new_user');
 });
 
