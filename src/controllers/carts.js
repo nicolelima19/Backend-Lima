@@ -1,5 +1,5 @@
 import { request, response } from "express";
-import { addProductInCartService, getCartByIdService } from "../services/carts.js";
+import { addProductInCartService, deleteProductsInCartService, getCartByIdService, updateProductsInCartService } from "../services/carts.js";
 
 export const getCartById = async (req = request, res = response) => {
     try {
@@ -17,7 +17,7 @@ export const getCartById = async (req = request, res = response) => {
 export const createCart = async (req = request, res = response) => {
     try {
         const carrito = await createCartService();
-        return res.json({ msg: `Carrito creado`, carrito });
+        return res.json({ msg: 'Carrito creado', carrito });
     } catch (error) {
         return res.status(500).json({ error: 'Error al crear el carrito' });
     }
@@ -35,3 +35,44 @@ export const addProductInCart = async (req = request, res = response) => {
         return res.status(500).json({ error: 'Error al añadir productos' });
     }
 };
+
+export const deleteProductsInCart = async (req = request, res = response) => {
+    try {
+        const { cid, pid } = req.params;
+        const carrito = await deleteProductsInCartService(cid, pid);
+        if (!carrito)
+            return res.status(404).json({ msg: 'No se pudo realizar la opereación.' });
+        return res.json({ msg: 'PRoducto eliminado del carrito.', carrito })
+    } catch (error) {
+        return res.status(500).json({ error: 'Error al añadir productos.' });
+    }
+}
+
+export const updateProductsInCart = async (req = request, res = response) => {
+    try {
+        const { cid, pid } = req.params;
+        const { quantity } = req.body;
+
+        if(quantity || !Number.isInteger(quantity))
+            return res.status(404).json({msg: 'La propiedad quantity es obligatoria y debe de ser un número entero.'})
+
+        const carrito = await updateProductsInCartService(cid, pid, quantity);
+        if (!carrito)
+            return res.status(404).json({ msg: 'No se pudo realizar la opereación.' });
+        return res.json({ msg: 'El producto se ha actualizado en el carrito.', carrito })
+    } catch (error) {
+        return res.status(500).json({ error: 'Error al añadir productos.' });
+    }
+}
+
+export const deleteCart = async (req = request, res = response) => {
+    try {
+        const { cid } = req.params;
+        const carrito = await updateProductsInCartService(cid, pid, quantity);
+        if (carrito)
+            return res.status(404).json({ msg: 'No se pudo realizar la opereación.' });
+        return res.json({ msg: 'El producto se ha actualizado en el carrito.', carrito })
+    } catch (error) {
+        return res.status(500).json({ error: 'Error al añadir productos.' });
+    }
+}

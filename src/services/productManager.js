@@ -26,16 +26,18 @@ export const getProductsService = async ({ limit = 2, page = 1, sort, query }) =
 
         const totalPages = Math.ceil(totalDocs / limit);
         const hasNextPage = page < totalPages;
-        const hastPrePage = page > 1;
-        const prevPage = hastPrePage ? page - 1 : null;
+        const hasPrePage = page > 1;
+        const prevPage = hasPrePage ? page - 1 : null;
         const nextPage = hasNextPage ? page + 1 : null;
 
         return {
             totalDocs,
             totalPages,
             limit,
+            query:JSON.stringify(query),
+            page,
             hasNextPage,
-            hastPrePage,
+            hasPrePage,
             prevPage,
             nextPage,
             payload: productos,
