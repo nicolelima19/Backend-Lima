@@ -1,6 +1,6 @@
 import { query, request, response } from "express";
 import { productModel } from "../dao/models/products.js";
-import { deleteProductService, getProductsService } from "../services/productManager.js";
+import { addProductService, deleteProductService, getProductsByIdService, getProductsService } from "../services/productManager.js";
 
 export const getProducts = async (req = request, res = response) => {
     try {
