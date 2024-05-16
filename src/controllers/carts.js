@@ -1,18 +1,20 @@
 import { request, response } from "express";
 import { addProductInCartService, createCartService, deleteProductsInCartService, getCartByIdService, updateProductsInCartService } from "../services/carts.js";
 
-export const getCartById = async (req = request, res = response) => {
+export const getCartById = async (req, res) => {
     try {
         const { cid } = req.params;
         const carrito = await getCartByIdService(cid);
-        if (carrito)
+        if (carrito) {
             return res.json({ carrito });
-
-        return res.status(404).json({ msg: `El carrito con id ${cid} no existe.` });
+        }
+        return res.status(404).json({ msg: `El carrito con ID ${cid} no existe.` });
     } catch (error) {
-        return res.status(500).json({ error: 'Error al obtener productos' });
+        console.error('Error al obtener el carrito por ID:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
 
 export const createCart = async (req = request, res = response) => {
     try {

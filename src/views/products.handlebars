@@ -68,8 +68,9 @@
 
     <script>
         function addToCart(productId) {
+            console.log({productId})
             const idCart = '663445089fa69036528b6503';
-            fetch(`/api/carts/${idCart}/product/${productId}`, {
+            fetch(`/api/cart/${idCart}/product/${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,5 +86,5 @@
         }
     </script>
 
-    <button onclick="addToCart">Agregar al carrito</button>
+    
 </div>

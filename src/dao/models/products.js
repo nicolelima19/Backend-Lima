@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const nameCollection = 'Producto';
+const nameCollection = 'Products';
 
 const productoSchema = new Schema({
     title: { type: String, required: [true, 'El título del producto es obligatorio.'] },

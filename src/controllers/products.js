@@ -38,6 +38,7 @@ export const addProduct = async (req = request, res = response) => {
     }
 };
 
+
 export const updateProducts = async (req = request, res = response) => {
     try {
         const { pid } = req.params;
