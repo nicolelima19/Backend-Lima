@@ -56,12 +56,34 @@
         {{/if}}
 
         {{#if result.hasPrevPage}}
-        <a href="?page={{result.prevPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Anterior</a>
+        <a
+            href="?page={{result.prevPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Anterior</a>
         {{/if}}
 
         {{#if result.hasNextPage}}
-        <a href="?page={{result.nextPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Siguiente</a>
+        <a
+            href="?page={{result.nextPage}}&limit={{result.limit}}{{#if result.query}}&query={{result.query}}{{/if}}">Siguiente</a>
         {{/if}}
     </div>
 
+    <script>
+        function addToCart(productId) {
+            const idCart = '663445089fa69036528b6503';
+            fetch(`/api/carts/${idCart}/product/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+    </script>
+
+    <button onclick="addToCart">Agregar al carrito</button>
 </div>
