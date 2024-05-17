@@ -1,14 +1,16 @@
 {{> header}}
 
 <div class="chat-container">
-        <h1>Bienvenidos al chat de mi proyecto.</h1>
-    </div>
+    <h1>Bienvenidos al chat de mi proyecto.</h1>
+</div>
 
-    <div class="chat-box">
-        <div id="messageLogs" class="message-logs"></div>
-        <input id="chatBox" type="text" class="input-box" autofocus>
-    </div>
+<div class="chat-box">
+    <div id="messageLogs" class="message-logs"></div>
+    <input id="chatBox" type="text" class="input-box" autofocus>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="../public/js/chat.js"></script>
+    <button type="submit">Enviar</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

@@ -46,37 +46,22 @@ const expressServer = app.listen(PORT, () => { console.log(`Corriendo aplicació
 const io = new Server(expressServer);
 
 io.on('connection', async (socket) => {
-    try {
-        const { payload } = await getProductsService({});
-        socket.emit("productos", payload);
-        socket.on("agregarProducto", async (producto) => {
-            const newProduct = await addProductService({ ...producto });
-            if (newProduct) {
-                const { payload: updatedProducts } = await getProductsService({});
-                io.emit('productos', updatedProducts);
+    console.log('Nuevo cliente conectado');
+
+    const messages = await messageModel.find();
+    socket.emit('messageLogs', messages);
+
+    socket.on('message', async (data) => {
+        try {
+            const newMessage = await messageModel.create({ ...data });
+            if (newMessage) {
+                const allMessages = await messageModel.find();
+                io.emit('messageLogs', allMessages); // Emitir a todos los clientes
             }
-        });
-        const emitAllMessages = async () => {
-            try {
-                const messages = await messageModel.find();
-                socket.emit('message', messages);
-            } catch (error) {
-                console.error('Error al obtener mensajes:', error);
-            }
-        };
-        socket.on('message', async (data) => {
-            try {
-                const newMessage = await messageModel.create({ ...data });
-                if (newMessage) {
-                    emitAllMessages();
-                }
-            } catch (error) {
-                console.error('Error al crear un nuevo mensaje:', error);
-            }
-        });
-        socket.broadcast.emit('new_user');
-        emitAllMessages();
-    } catch (error) {
-        console.error('Error en la conexión de Socket.IO:', error);
-    }
+        } catch (error) {
+            console.error('Error al crear un nuevo mensaje:', error);
+        }
+    });
+
+    socket.broadcast.emit('new_user');
 });

@@ -1,8 +1,8 @@
 const socket = io();
 
 let user;
-let chatBox = document.getElementById('messageLogs');
-let log = document.getElementById('chatBox');
+const chatBox = document.getElementById('chatBox');
+const log = document.getElementById('messageLogs');
 let data = [];
 
 socket.on('message', msg => {
@@ -25,7 +25,7 @@ const renderizar = (msgs) => {
     });
 
     log.innerHTML = messages;
-    chatBox.scrollIntoView(false);
+    log.scrollIntoView(false);
 };
 
 Swal.fire({
@@ -33,12 +33,10 @@ Swal.fire({
     input: 'email',
     text: 'Ingresa tu correo electrónico para entrar.',
     inputValidator: (value) => {
-        if (!value)
-            return 'Necesitas ingresar un correo electrónico para continuar.';
+        if (!value) return 'Necesitas ingresar un correo electrónico para continuar.';
 
         const emailRegex = /^\S+@\S+\.\S+$/;
-        if (!emailRegex.test(value))
-            return 'Ingresa un correo electrónico válido.';
+        if (!emailRegex.test(value)) return 'Ingresa un correo electrónico válido.';
 
         return null;
     },
@@ -50,16 +48,21 @@ Swal.fire({
     }
 });
 
+const sendMessage = () => {
+    const message = chatBox.value.trim();
+    if (message.length > 0) {
+        socket.emit('message', { user, message });
+        chatBox.value = '';
+    }
+};
+
 chatBox.addEventListener('keyup', evt => {
-    if (evt.key == 'Enter') { 
-        const message = chatBox.value.trim();
-        if (message.length > 0) {
-            socket.emit('message', { user, message });
-            chatBox.value = '';
-        }
+    if (evt.key === 'Enter') {
+        sendMessage();
     }
 });
 
+sendButton.addEventListener('click', sendMessage);
 
 socket.on('new_user', () => {
     Swal.fire({
