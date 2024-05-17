@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const nameCollection = 'Products';
+const nameCollection = 'Productos';
 
 const productoSchema = new Schema({
     title: { type: String, required: [true, 'El título del producto es obligatorio.'] },
@@ -9,6 +9,7 @@ const productoSchema = new Schema({
     code: { type: String, required: [true, 'El código del producto es obligatorio.'], unique: true },
     stock: { type: Number, required: [true, 'El stock del producto es obligatorio.'] }
 });
+
 
 productoSchema.set('toJSON', {
     transform: function(doc, ret) {

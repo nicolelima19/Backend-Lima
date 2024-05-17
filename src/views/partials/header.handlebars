@@ -1,0 +1,14 @@
+<header>
+    <div class="header-container">
+        <h2>Bienvendio</h2>
+        <nav>
+            {{#if user}}
+            <p>Bienvenido, {{user}}</p>
+            <a href="/logout">Cerrar sesión.</a>
+            {{else}}
+            <a href="/login">Iniciar sesión.</a>
+            <a href="/register">Resgistarse aquí.</a>
+            {{/if}}
+        </nav>
+    </div>
+</header>

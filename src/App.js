@@ -1,6 +1,8 @@
 import express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import "dotenv/config";
 
 import products from "./routers/product.js";
@@ -19,6 +21,16 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: `${process.env.URI_MONGO_DB}/${process.env.NAME_DB}`,
+        ttl: 3600
+    }),
+    secret: process.env.SECRET_SESSION,
+    resave: true,
+    saveUninitialized: true,
+}));
 
 
 app.engine('handlebars', engine());
@@ -68,5 +80,3 @@ io.on('connection', async (socket) => {
         console.error('Error en la conexión de Socket.IO:', error);
     }
 });
-
-

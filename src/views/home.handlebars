@@ -1,46 +1,50 @@
-<div>
-    <h1>Desafio</h1>
+{{> header}}
 
-    <h3>Lista de productos:</h3>
+<div class="container">
+        <h2 class="main-title">Desafio</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Thumbnail</th>
-                <th>Code</th>
-                <th>Stock</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each productos}}
-            <tr>
-                <td>{{this.id}}</td>
-                <td>{{this.title}}</td>
-                <td>{{this.description}}</td>
-                <td>{{this.price}}</td>
-                <td>{{this.thumbnail}}</td>
-                <td>{{this.code}}</td>
-                <td>{{this.stock}}</td>
-                <td>
-                    {{#if this.status}}
-                    Activo
-                    {{else}}
-                    Descativado
-                    {{/if}}
-                </td>
-                <td>
-                    {{#if this.thumbnail.length}}
-                    <a href="{{this.thumbnails.[0]}}" target="_blank">{{this.thumbnails.[0]}}</a>
-                    {{else}}
-                    No hay imagen
-                    {{/if}}
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-</div>
+        <h3 class="product-list-title">Lista de productos:</h3>
+
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Thumbnail</th>
+                    <th>Code</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Image Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each productos}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.title}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.thumbnail}}</td>
+                    <td>{{this.code}}</td>
+                    <td>{{this.stock}}</td>
+                    <td>
+                        {{#if this.status}}
+                        Activo
+                        {{else}}
+                        Desactivado
+                        {{/if}}
+                    </td>
+                    <td>
+                        {{#if this.thumbnails.length}}
+                        <a href="{{this.thumbnails.[0]}}" target="_blank">{{this.thumbnails.[0]}}</a>
+                        {{else}}
+                        No hay imagen
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
