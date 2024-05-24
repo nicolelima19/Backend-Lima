@@ -1,7 +1,6 @@
 import { request, response } from "express";
 import { getProductsService } from "../services/productManager.js";
 import { getCartByIdService } from "../services/carts.js";
-import { getUserEmail, registerUser } from "../services/user.js";
 
 export const homeView = async (req = response, res = response) => {
     const { payload } = await getProductsService({});
@@ -33,49 +32,41 @@ export const cartView = async (req = response, res = response) => {
 };
 
 export const loginGet = async (req = response, res = response) => {
+
+    if(req.session.user)
+        return res.redirect('/');
+
     return res.render('login', { title: 'Login', styles: 'login.css' });
 };
 
 export const registerGet = async (req = response, res = response) => {
+
+    if(req.session.user)
+        return res.redirect('/');
+
     return res.render('register', { title: 'Registro', styles: 'register.css' });
 };
 
-export const registerPost = async (req = response, res = response) => {
-    const { password, confirmPassword } = req.body;
-
-    if (password !== confirmPassword) {
-        console.log('Las constraseñas no coinciden');
-        return res.redirect('/register')
-    };
-
-    const user = await registerUser({ ...req.body });
-
-    if (user) {
-        const userName = `${user.name} ${user.lastName}`;
-        req.session.user = userName;
-        req.session.rol = user.rol;
-        console.log('User creado');
-        return res.redirect('/');
+export const registerPost = async (req, res) => {
+    if (req.user) {
+        return res.redirect('/register');
     }
-
-    return res.redirect('/register');
+    return res.redirect('/login');
 };
 
-export const loginPost = async (req = response, res = response) => {
-    const { email, password } = req.body;
-    console.log({ email, password });
 
-    const user = await getUserEmail(email);
-    console.log({ user });
+export const login = async (req, res) => {    
+    if(!req.user)
+        return res.redirect('/login');
 
-    if (user && user.password === password) {
-        const userName = `${user.name} ${user.lastName}`;
-        req.session.user = userName;
-        req.session.rol = user.rol;
-        return res.redirect('/');
-    }
+    req.session.user = {
+        name: user.name,
+        lastName: user.lastName,
+        email: user.email,
+        rol: user.rol
+    };
 
-    return res.redirect('/login');
+    return res.redirect('/');
 };
 
 export const logout = async (req = response, res = response) => {

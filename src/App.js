@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import passport from "passport";
 import "dotenv/config";
 
 import products from "./routers/product.js";
@@ -11,7 +12,8 @@ import views from "./routers/views.js";
 import __dirname from "./utils.js";
 import { dbConnection } from "./database/config.js";
 import { messageModel } from "./dao/models/messages.js";
-import { addProductService, getProductsService } from "./services/productManager.js";
+import { initializePassport } from "./config/passport.js";
+
 
 await dbConnection();
 
@@ -32,11 +34,16 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+// CONFIG PASSPORT
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.engine('handlebars', engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
-
 
 app.use('/', views);
 app.use("/api/products", products);
